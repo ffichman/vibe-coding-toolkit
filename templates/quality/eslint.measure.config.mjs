@@ -52,6 +52,7 @@ const config = [
       "**/coverage/**",
       "**/vendor/**",
       "**/.quality/**",
+      "**/.claude/**",
       "**/*.min.js",
     ],
   },

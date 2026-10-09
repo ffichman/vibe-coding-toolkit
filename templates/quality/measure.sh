@@ -29,7 +29,7 @@ line_count_report() {
   local label="$1"
   shift
   local out="$REPORT_DIR/lines-$label.txt"
-  find "$ROOT" \( -name node_modules -o -name .git -o -name dist -o -name build -o -name out -o -name .next -o -name coverage -o -name vendor -o -name Pods -o -name Carthage -o -name .build -o -name DerivedData -o -name .quality \) -prune -o -type f \( "$@" \) -exec wc -l {} + 2>/dev/null \
+  find "$ROOT" \( -name node_modules -o -name .git -o -name .claude -o -name dist -o -name build -o -name out -o -name .next -o -name coverage -o -name vendor -o -name Pods -o -name Carthage -o -name .build -o -name DerivedData -o -name .quality \) -prune -o -type f \( "$@" \) -exec wc -l {} + 2>/dev/null \
     | awk -v max="$MAX_LINES" -v root="$ROOT/" '{ n=$1; sub(/^ *[0-9]+ /, ""); if ($0 != "total" && n > max) { f=$0; if (index(f, root) == 1) f = substr(f, length(root) + 1); printf "%6d  %s\n", n, f } }' \
     | sort -rn > "$out"
   local total
