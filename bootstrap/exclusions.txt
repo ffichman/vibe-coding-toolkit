@@ -1,0 +1,11 @@
+# Repositórios na lista de exclusão do apply-repo.sh.
+# Um padrão por linha; comparação por substring, sem diferenciar maiúsculas,
+# contra o nome da pasta do repo e a URL do remote origin.
+# Repos que casam recebem SÓ o CLAUDE.md (com guardrails) + medição efêmera:
+# nenhum MEMORY.md, nenhum arquivo .quality/, nenhuma dependência instalada.
+
+# RFF Grit (telemetria + app iOS/watchOS) — intocável para workflows autônomos
+rff-grit
+rff_grit
+rffgrit
+rff grit

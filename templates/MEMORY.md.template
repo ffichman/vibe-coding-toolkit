@@ -1,0 +1,16 @@
+# MEMORY — [PROJECT NAME]
+
+> Índice de memória do projeto. Carregado no início da sessão via `@.claude/memory/MEMORY.md` no CLAUDE.md.
+> Uma linha por entrada. Teto mole: ~130 linhas. Detalhes vão em arquivos por tópico nesta pasta.
+> Formato e regras: docs/tools/09-claude-memory-system.md do vibe-coding-toolkit.
+
+## Como registrar
+
+- Um arquivo por memória em `.claude/memory/<slug-em-kebab-case>.md`, com frontmatter `name`, `description`, `metadata.type`.
+- `type` é fixo: `feedback` | `architecture` | `business-rule` | `reference`.
+- Só registre o que não é óbvio lendo o código: correções que custaram tentativas, regras de negócio, armadilhas.
+- Nunca registre segredos, tokens, senhas ou dados pessoais.
+
+## Índice
+
+<!-- - [slug](slug.md) — resumo de uma linha -->

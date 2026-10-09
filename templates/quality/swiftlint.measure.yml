@@ -1,0 +1,16 @@
+# vibe-coding-toolkit — SwiftLint em MODO SÓ-MEDIÇÃO.
+# Só mede tamanho de arquivo. error alto de propósito: nunca falha build.
+# Não substitui o .swiftlint.yml do projeto; é chamado por .quality/measure.sh.
+only_rules:
+  - file_length
+file_length:
+  warning: 350
+  error: 1000000
+  ignore_comment_lines: false
+excluded:
+  - Pods
+  - Carthage
+  - .build
+  - DerivedData
+  - build
+  - .quality
