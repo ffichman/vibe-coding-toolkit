@@ -6,7 +6,7 @@ Depois que o prompt 08 já mediu e te deu a lista de arquivos acima do
 teto, cole esta linha:
 
 ```
-Leia https://raw.githubusercontent.com/soumatheusgomes/vibe-coding-toolkit/main/docs/prompts/09-file-size-refactor.md
+Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/09-file-size-refactor.md
 e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350,
 BATCH_SIZE=3 e RULE_ID=quality/max-lines. Descubra sozinho os comandos de
 lint, teste e typecheck lendo o package.json.
