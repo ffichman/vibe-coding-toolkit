@@ -7,7 +7,7 @@ funciona em qualquer agente que consiga ler uma URL — Claude Code, Codex,
 Cursor:
 
 ```
-Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/08-eslint-quality-gates-install.md
+Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/revisado-1/docs/prompts/08-eslint-quality-gates-install.md
 e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350
 e o gerenciador de pacotes que você encontrar no repositório.
 Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
@@ -84,7 +84,7 @@ this project's real shape.
 ## 0. Get the files
 
 Fetch these six files from [SOURCE_URL] (default:
-https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/templates/eslint):
+https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/revisado-1/templates/eslint):
 
   eslint-rules/utils.cjs
   eslint-rules/core-rules.cjs

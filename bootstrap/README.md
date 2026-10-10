@@ -1,6 +1,6 @@
 # bootstrap/
 
-Adoção do vibe-coding-toolkit nas máquinas e repositórios (fork `ffichman/vibe-coding-toolkit`, tag `baseline-revisado`).
+Adoção do vibe-coding-toolkit nas máquinas e repositórios (fork `ffichman/vibe-coding-toolkit`, tag `revisado-1`; `baseline-revisado` = código original revisado).
 
 Todos os scripts são **dry-run por padrão**. Nada muda sem `--apply`.
 Sem comentários inline e sem colchetes sem escape (compatível com o zsh do THE-NEXTT).

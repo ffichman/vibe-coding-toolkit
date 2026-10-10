@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -u
 
-VCT_REF="baseline-revisado"
+VCT_REF="revisado-1"
 AGENT_BROWSER_VERSION="0.38.2"
 CONTEXT7_URL="https://mcp.context7.com/mcp"
 PLUGIN_MARKETPLACE_SRC="anthropics/claude-plugins-official"

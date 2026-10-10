@@ -603,7 +603,7 @@ linhas por arquivo**, que é a regra que mais muda como o código cresce —
 existe um caminho de uma linha. Cole no seu agente:
 
 ```
-Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/08-eslint-quality-gates-install.md
+Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/revisado-1/docs/prompts/08-eslint-quality-gates-install.md
 e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350.
 Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
 ```

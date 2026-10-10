@@ -9,7 +9,7 @@ direto, acesso a dados fora de lugar, orçamento de complexidade), cole
 esta linha no seu agente:
 
 ```
-Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/02-eslint-warning-burndown.md
+Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/revisado-1/docs/prompts/02-eslint-warning-burndown.md
 e execute o prompt que está nesse arquivo neste projeto, para o conjunto
 inteiro de avisos restantes. Descubra sozinho os comandos de lint, teste,
 typecheck e build lendo o package.json.
