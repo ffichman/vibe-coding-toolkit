@@ -56,3 +56,14 @@ Regras:
 - Não altera `eslint.config.*`, `.swiftlint.yml`, `package.json` nem hooks de git existentes.
 - `--install-deps` é a única opção que mexe em dependências: adiciona `eslint@9.39.5` (+ `typescript-eslint@8.71.1` em TS) com versão exata, usando o gerenciador do lockfile. Se já houver ESLint local, não faz nada.
 - A medição (`bash .quality/measure.sh`) sempre sai com código 0. Sem ESLint ou SwiftLint instalado, cai para contagem de linhas.
+
+## apply-all.sh
+
+Acha todos os repositórios git sob uma ou mais raízes e roda o `apply-repo.sh` em cada um, com resumo em tabela e um log por repo.
+
+```bash
+bash bootstrap/apply-all.sh ~/Aethel ~/nextthouse-os --log-dir ~/Aethel/tools/vct-all
+bash bootstrap/apply-all.sh ~/Aethel --apply
+```
+
+Pula `node_modules`, `worktrees`, `mirrors`, `backups*`, `obsoleto*`, `Library`, `.Trash`, `.build` e `Pods`. Padrão: `--dry-run`. Profundidade padrão: 4 (`--depth N`).

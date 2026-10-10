@@ -13,6 +13,7 @@ Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-rev
 e execute o prompt que está nesse arquivo neste projeto, para o conjunto
 inteiro de avisos restantes. Descubra sozinho os comandos de lint, teste,
 typecheck e build lendo o package.json.
+Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
 ```
 
 O resto deste documento é o mesmo prompt, aberto, pra quem prefere colar o

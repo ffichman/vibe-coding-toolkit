@@ -62,6 +62,7 @@ que leia uma URL):
 ```
 Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/08-eslint-quality-gates-install.md
 e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350.
+Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
 ```
 
 Ele baixa as três regras já escritas e testadas, adapta a configuração pra
@@ -142,7 +143,7 @@ Não existe um único jeito "certo" de percorrer este repositório — depende d
 - **Só quer copiar um prompt pronto e adaptar pro seu caso?** [`docs/prompts/`](docs/prompts/) tem templates prontos pra colar e ajustar — sanitização de projeto, burndown de lint, code review multi-agente, e mais.
 - **Quer só os arquivos de configuração pra colar no seu projeto?** [`templates/`](templates/) tem o `CLAUDE.md.template`, um `settings.json.example` de hooks, e a regra de ondas paralelas pronta pra copiar.
 - **Quer o ESLint configurado, com teto de 350 linhas por arquivo, sem configurar nada à mão?** Cole no seu agente:
-  > Leia `https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/08-eslint-quality-gates-install.md` e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350.
+  > Leia `https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/08-eslint-quality-gates-install.md` e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350. Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
 
   Ele baixa as regras prontas de [`templates/eslint/`](templates/eslint/), adapta pro seu projeto e reporta quantos arquivos passaram do teto — sem consertar nada. Depois, a mesma linha trocando `08-` por [`09-file-size-refactor.md`](docs/prompts/09-file-size-refactor.md) faz ele quebrar esses arquivos em módulos menores, um por vez, com teste rodando entre cada um.
 

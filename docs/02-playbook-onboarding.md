@@ -605,6 +605,7 @@ existe um caminho de uma linha. Cole no seu agente:
 ```
 Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/08-eslint-quality-gates-install.md
 e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350.
+Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
 ```
 
 Ele baixa três regras já escritas e testadas, adapta a configuração pra sua
@@ -709,13 +710,13 @@ curtas e estáveis (`@e1`, `@e2`...), o que aguenta muito melhor mudanças
 de layout do que um seletor CSS.
 
 ```bash
-npm i -g agent-browser
+npm i -g agent-browser@0.38.2
 agent-browser install
 ```
 
 > 💬 **Peça pro seu agente:**
 > ```
-> Instale o agent-browser pra mim: rode `npm i -g agent-browser` e depois `agent-browser install`.
+> Instale o agent-browser pra mim: rode `npm i -g agent-browser@0.38.2` e depois `agent-browser install`.
 > ```
 > O Claude Code roda os dois comandos e confirma que funcionou — você não precisa fazer isso manualmente.
 

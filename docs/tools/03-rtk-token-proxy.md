@@ -75,7 +75,8 @@ cópia exata de nenhuma implementação específica.
 ### Passo 1 — escolha os comandos seguros pra reescrever
 
 Comece só com leituras puras, sem efeito colateral e sem ambiguidade sobre
-o que fazem: `git status`, `git diff`, `git log`, `grep`, `find`, `ls`. Não
+o que fazem: `git status`, `git diff`, `git log`, `grep`, `ls`. Deixe `find`
+de fora: `find -delete` e `find -exec` alteram arquivos. Não
 inclua nada que escreva, apague, ou possa se comportar de formas
 diferentes dependendo de flags menos comuns — isso vira a pegadinha
 discutida mais abaixo.
@@ -114,7 +115,7 @@ evento mal formado.
 ### Passo 4 — reconheça comandos conhecidos e seguros
 
 ```javascript
-const REESCREVIVEL = /^(git status|git diff|git log|grep|find|ls)\b/;
+const REESCREVIVEL = /^(git (status|diff|log)|grep|ls)( [^;&|`$<>(){}\\\n]*)?$/;
 
 if (!REESCREVIVEL.test(comando)) {
   process.exit(0); // não reconhecido — comando original roda sem alteração
@@ -127,6 +128,12 @@ uma **allowlist** (lista de permissões: só o que está explicitamente
 listado é afetado; tudo o mais passa direto, sem alteração). Qualquer
 coisa fora dela — incluindo os próprios comandos de meta do proxy — segue
 pro terminal sem nenhuma modificação.
+
+A regex compara o comando **inteiro** e recusa qualquer metacaractere de
+shell (`;`, `&`, `|`, crase, `$`, `<`, `>`, parênteses, chaves, barra
+invertida, quebra de linha). Comparar só o começo (`^git status\b`) deixaria
+passar `git status; rm -rf …` — e o trecho perigoso seguiria junto para o
+proxy.
 
 ### Passo 5 — confira se o proxy está disponível
 
@@ -150,28 +157,37 @@ rodar, exatamente como se o proxy não existisse. Veja
 geral de fail-open (falhar aberto — deixar a ação original seguir diante
 de um erro, em vez de travar) que essa checagem segue.
 
-### Passo 6 — rode o proxy e devolva o resultado compacto
+### Passo 6 — reescreva o comando, sem executá-lo no hook
 
 ```javascript
-import { execFile } from "node:child_process";
+const aspas = (t) => "'" + t.replaceAll("'", "'\\''") + "'";
 
-execFile(PROXY_BIN, ["run", comando], (erro, saida) => {
-  if (erro) {
-    process.exit(0); // proxy deu erro — falha aberta, comando original roda
-    return;
-  }
-
-  // Bloqueia o comando original (caro) e devolve o resultado compacto
-  // diretamente — o agente recebe uma resposta, não um pedido de nova tentativa.
-  console.log(JSON.stringify({ decision: "block", reason: saida }));
-  process.exit(0);
-});
+process.stdout.write(
+  JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      updatedInput: {
+        ...evento.tool_input,
+        command: `${PROXY_BIN} run -- ${aspas(comando)}`,
+      },
+    },
+  })
+);
+process.exitCode = 0;
 ```
 
-Bloquear aqui não significa "recusar e travar" — significa "impedir que o
-comando caro rode, e entregar a resposta equivalente por outro caminho".
-Do ponto de vista do agente, ele pediu um comando e recebeu uma resposta;
-só não foi o comando original que gerou essa resposta.
+O hook **não executa nada**: ele só troca o comando que o agente pediu pela
+chamada equivalente ao proxy, e quem roda é a própria ferramenta Bash do
+Claude Code — com as mesmas regras de permissão (allow/deny), o mesmo
+timeout e o mesmo registro de qualquer outro comando. Como não há
+`permissionDecision` na resposta, o comando reescrito segue o fluxo normal
+de permissões. Se a versão do Claude Code não aceitar `updatedInput`, nada
+quebra: o comando original roda sem alteração.
+
+> A versão anterior deste guia executava o comando dentro do hook
+> (`execFile`) e devolvia `{ decision: "block", reason: saida }`. Isso
+> rodava comandos por fora das permissões do Claude Code, sem timeout, e
+> podia executar duas vezes quando o proxy falhava. Não use esse formato.
 
 ### Passo 7 — o hook completo
 
@@ -180,18 +196,19 @@ Juntando os passos 3 a 6:
 ```javascript
 #!/usr/bin/env node
 import { access } from "node:fs/promises";
-import { execFile } from "node:child_process";
 import { readStdinRaw, parseHookEvent } from "./hook-io.mjs";
 
 const PROXY_BIN = "/usr/local/bin/rtk-proxy";
-const REESCREVIVEL = /^(git status|git diff|git log|grep|find|ls)\b/;
+// Só comandos somente-leitura, comparados por inteiro. `find` fica de fora
+// (aceita -delete e -exec). Qualquer metacaractere de shell desqualifica.
+const REESCREVIVEL = /^(git (status|diff|log)|grep|ls)( [^;&|`$<>(){}\\\n]*)?$/;
 
 const evento = parseHookEvent(readStdinRaw());
-if (evento === null) {
-  process.exit(0); // sem evento utilizável — falha aberta
+if (evento === null || typeof evento !== "object") {
+  process.exit(0); // sem evento utilizável — segue o fluxo normal
 }
 
-const comando = evento?.tool_input?.command ?? "";
+const comando = String(evento?.tool_input?.command ?? "").trim();
 
 if (!REESCREVIVEL.test(comando)) {
   process.exit(0); // não reconhecido — comando original roda sem alteração
@@ -200,18 +217,39 @@ if (!REESCREVIVEL.test(comando)) {
 try {
   await access(PROXY_BIN);
 } catch {
-  process.exit(0); // proxy não instalado — falha aberta
+  process.exit(0); // proxy não instalado — comando original roda
 }
 
-execFile(PROXY_BIN, ["run", comando], (erro, saida) => {
-  if (erro) {
-    process.exit(0); // proxy deu erro — falha aberta
-    return;
-  }
-  console.log(JSON.stringify({ decision: "block", reason: saida }));
-  process.exit(0);
-});
+const aspas = (t) => "'" + t.replaceAll("'", "'\\''") + "'";
+
+process.stdout.write(
+  JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      updatedInput: {
+        ...evento.tool_input,
+        command: `${PROXY_BIN} run -- ${aspas(comando)}`,
+      },
+    },
+  })
+);
+process.exitCode = 0;
 ```
+
+O que mudou em relação à primeira versão deste guia (revisão de segurança):
+
+- **O hook não executa mais o comando.** Ele só reescreve (`updatedInput`) e
+  a execução fica com a ferramenta Bash do Claude Code, dentro das regras de
+  permissão, do timeout e do log normais. Acabou também a execução dupla
+  quando o proxy falhava.
+- **Comparação do comando inteiro.** A regex antiga só olhava o começo, então
+  `git status; rm -rf …` passava. Agora qualquer `;`, `&`, `|`, crase, `$`,
+  redirecionamento, parênteses, chaves, barra invertida ou quebra de linha
+  desqualifica o comando, e o argumento vai entre aspas simples escapadas.
+- **`find` saiu da lista**, porque `find -delete` e `find -exec` alteram arquivos.
+- **Sem `decision: "block"`**, formato antigo que não é o documentado para PreToolUse.
+- **Teste antes de confiar:** rode `claude --debug` e confira no log que o
+  comando chegou reescrito e passou pelas permissões normais.
 
 ### Passo 8 — registre o hook
 
@@ -222,7 +260,7 @@ execFile(PROXY_BIN, ["run", comando], (erro, saida) => {
       {
         "matcher": "Bash",
         "hooks": [
-          { "type": "command", "command": "node .claude/hooks/rtk-proxy-hook.mjs" }
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/rtk-proxy-hook.mjs\"", "timeout": 5 }
         ]
       }
     ]
@@ -351,7 +389,7 @@ versão adaptada ao seu fluxo de trabalho.
 
 **Isso funciona com comandos que escrevem ou apagam alguma coisa?**
 O padrão, do jeito descrito aqui, é pensado só pra comandos de
-**leitura** — `status`, `diff`, `log`, `grep`, `find`, listar arquivos.
+**leitura** — `status`, `diff`, `log`, `grep`, listar arquivos.
 Reescrever um comando de escrita (um `git commit`, um `rm`) introduz um
 risco totalmente diferente: um parser errado ali não devolve uma resposta
 errada, pode executar a ação errada. Fica fora do escopo deste padrão, de

@@ -10,6 +10,7 @@ Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-rev
 e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350,
 BATCH_SIZE=3 e RULE_ID=quality/max-lines. Descubra sozinho os comandos de
 lint, teste e typecheck lendo o package.json.
+Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
 ```
 
 O resto deste documento é o mesmo prompt, aberto.

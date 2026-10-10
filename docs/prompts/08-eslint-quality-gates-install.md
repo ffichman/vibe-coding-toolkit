@@ -10,6 +10,7 @@ Cursor:
 Leia https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado/docs/prompts/08-eslint-quality-gates-install.md
 e execute o prompt que está nesse arquivo neste projeto. Use MAX_LINES=350
 e o gerenciador de pacotes que você encontrar no repositório.
+Antes de alterar qualquer arquivo, mostre o plano e espere minha confirmação.
 ```
 
 O resto deste documento é o mesmo prompt, aberto, pra quem prefere colar o
@@ -91,6 +92,16 @@ https://raw.githubusercontent.com/ffichman/vibe-coding-toolkit/baseline-revisado
   eslint.config.mjs.example
   eslint.typed.config.mjs.example
   verify.mjs
+
+Also fetch SHA256SUMS from the same [SOURCE_URL] and verify every file
+BEFORE placing or running anything. Download into a temporary directory
+that keeps the paths above, then run from that directory:
+
+  shasum -a 256 -c SHA256SUMS      (or: sha256sum -c SHA256SUMS)
+
+Every line must say OK. If any file fails or is missing, stop and report
+it — do not place, edit or run the files, and do not "fix" the checksum.
+Never fetch from a branch (main) instead of the pinned tag.
 
 Place them in the project like this:
 

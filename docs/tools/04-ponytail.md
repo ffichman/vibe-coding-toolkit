@@ -39,6 +39,8 @@ Dentro de uma sessão do Claude Code:
 /plugin install ponytail@ponytail
 ```
 
+> **Segurança:** marketplace de terceiro, sem versão fixa e com atualização automática; o plugin instala hooks que rodam a cada sessão e a cada mensagem. Leia o `hooks.json` no repositório antes de instalar e desligue a atualização automática. Veja `docs/01-installation.md`.
+
 O primeiro comando registra o repositório do GitHub como uma fonte de
 plugins instalável (um "marketplace"); o segundo instala o plugin `ponytail`
 a partir dessa fonte.

@@ -24,7 +24,7 @@ Sem essa ferramenta, o agente depurando um problema de frontend fica na mesma po
 > 💬 **Peça pro seu agente instalar:**
 >
 > ```
-> Instale o Chrome DevTools MCP pra mim: rode `claude mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest`.
+> Instale o Chrome DevTools MCP pra mim: rode `claude mcp add chrome-devtools --scope project -- npx -y chrome-devtools-mcp@1.10.1`.
 > ```
 >
 > O Claude Code tem acesso a terminal (Bash) — ele roda o comando e confirma que funcionou. Prefere fazer você mesmo? É o mesmo comando, direto no seu terminal.
@@ -48,13 +48,21 @@ Por padrão, o servidor sobe sua própria instância nova do Chrome. Pra conecta
     "chrome-devtools": {
       "command": "npx",
       "args": [
-        "chrome-devtools-mcp@latest",
+        "chrome-devtools-mcp@1.10.1",
         "--browser-url=http://127.0.0.1:9222"
       ]
     }
   }
 }
 ```
+
+> **Segurança:** `--browser-url` conecta o agente a um Chrome já aberto, com
+> todos os cookies e sessões logadas desse perfil — e qualquer página aberta
+> pode tentar injetar instruções no agente. Use sempre um **perfil dedicado**
+> (por exemplo, inicie o Chrome com `--remote-debugging-port=9222
+> --user-data-dir=$HOME/.chrome-devtools-mcp`), nunca o seu perfil principal,
+> e mantenha a versão fixa (`@1.10.1`) e o escopo de projeto (`--scope
+> project`) em vez de `@latest` com escopo de usuário.
 
 ## Tutorial passo a passo
 
@@ -63,7 +71,7 @@ Por padrão, o servidor sobe sua própria instância nova do Chrome. Pra conecta
 > 💬 **Peça pro seu agente instalar:**
 >
 > ```
-> Instale o Chrome DevTools MCP pra mim: rode `claude mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest`.
+> Instale o Chrome DevTools MCP pra mim: rode `claude mcp add chrome-devtools --scope project -- npx -y chrome-devtools-mcp@1.10.1`.
 > ```
 >
 > O Claude Code tem acesso a terminal (Bash) — ele roda o comando e confirma que funcionou. Prefere fazer você mesmo? É o mesmo comando, direto no seu terminal.

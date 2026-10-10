@@ -53,7 +53,18 @@ pacote de cada um.
 | hookify, pr-review-toolkit, commit-commands, claude-code-setup, feature-dev, code-review, claude-md-management | `anthropics/claude-plugins-official` | `/plugin install <nome>@claude-plugins-official` |
 | ui-ux-pro-max | `nextlevelbuilder/ui-ux-pro-max-skill` | `/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill` → `/plugin install ui-ux-pro-max@ui-ux-pro-max-skill` |
 | Graphify | pacote Python `graphifyy` (não é plugin) | `uv tool install graphifyy` → `graphify claude install` |
-| agent-browser | CLI npm (não é plugin) | `npm i -g agent-browser && agent-browser install` |
+| agent-browser | CLI npm (não é plugin) | `npm i -g agent-browser@0.38.2 && agent-browser install` |
+
+> **Segurança (revisão `baseline-revisado`).** Ponytail, Caveman, aia-harness e
+> ui-ux-pro-max vêm de marketplaces de terceiros, sem versão fixa, e se
+> atualizam sozinhos. Ponytail e Caveman instalam hooks que rodam a cada
+> início de sessão e a cada mensagem sua; o `/aia-harness:init` reescreve
+> `settings.json`, hooks e agentes. Trate-os como **opcionais**: antes de
+> instalar, leia o `hooks.json` e o código de cada plugin no repositório,
+> desligue a atualização automática do marketplace em `/plugin` e faça commit
+> da sua configuração para poder revisar o diff. O caminho revisado deste fork
+> é `bootstrap/install-global.sh`, que instala só Superpowers, Context7 (via
+> HTTP) e agent-browser com versão fixa.
 
 A linha `hookify, pr-review-toolkit, ...` reaproveita a mesma marketplace do
 Superpowers (`anthropics/claude-plugins-official`) — se você já rodou aquele

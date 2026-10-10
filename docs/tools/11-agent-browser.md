@@ -17,7 +17,7 @@ Um seletor CSS quebra assim que o layout de uma página muda. Uma abordagem só 
 > 💬 **Peça pro seu agente instalar:**
 >
 > ```
-> Instale o agent-browser pra mim: rode `npm i -g agent-browser` e depois `agent-browser install`.
+> Instale o agent-browser pra mim: rode `npm i -g agent-browser@0.38.2` e depois `agent-browser install`.
 > ```
 >
 > O Claude Code tem acesso a terminal (Bash) — ele roda os comandos e confirma que funcionou. Você não precisa abrir um terminal separado nem saber a diferença entre `pip`/`uv`/`npm`. Prefere fazer você mesmo? Os comandos são exatamente os mesmos, é só rodar direto no seu terminal.
@@ -63,7 +63,7 @@ Esse mesmo motivo é por que este documento também evita duplicar uma referênc
 > 💬 **Peça pro seu agente instalar:**
 >
 > ```
-> Instale o agent-browser pra mim: rode `npm i -g agent-browser` e depois `agent-browser install`.
+> Instale o agent-browser pra mim: rode `npm i -g agent-browser@0.38.2` e depois `agent-browser install`.
 > ```
 >
 > O Claude Code tem acesso a terminal (Bash) — ele roda os comandos e confirma que funcionou. Você não precisa abrir um terminal separado nem saber a diferença entre `pip`/`uv`/`npm`. Prefere fazer você mesmo? Os comandos são exatamente os mesmos, é só rodar direto no seu terminal.
