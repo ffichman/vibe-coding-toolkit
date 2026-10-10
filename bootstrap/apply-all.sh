@@ -6,9 +6,12 @@ MODE="--dry-run"
 DEPTH=4
 ROOTS=""
 LOG_DIR=""
+FROM=""
+KIT_DIR="$(dirname "$SCRIPT_DIR")"
 
 usage() {
-  echo "uso: apply-all.sh [--dry-run | --apply] [--depth N] [--log-dir DIR] <raiz> [raiz...]"
+  echo "uso: apply-all.sh [--dry-run | --apply] [--depth N] [--log-dir DIR] [--from LISTA] [raiz...]"
+  echo "--from LISTA: arquivo com um caminho de repo por linha (linhas com # são ignoradas); não faz varredura."
   echo "Acha repositórios git sob cada raiz e roda apply-repo.sh em cada um."
   echo "Pula node_modules, worktrees, mirrors, backups, obsoleto, Library e .Trash."
   echo "padrão: --dry-run (nada é alterado)"
@@ -20,6 +23,7 @@ while test $# -gt 0; do
     --dry-run) MODE="--dry-run"; shift ;;
     --depth) DEPTH="$2"; shift 2 ;;
     --log-dir) LOG_DIR="$2"; shift 2 ;;
+    --from) FROM="$2"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
     -*) echo "argumento desconhecido: $1" >&2; usage; exit 64 ;;
     *) ROOTS="$ROOTS
@@ -27,7 +31,7 @@ $1"; shift ;;
   esac
 done
 
-if test -z "$ROOTS"; then
+if test -z "$ROOTS" && test -z "$FROM"; then
   usage
   exit 64
 fi
@@ -38,12 +42,16 @@ mkdir -p "$LOG_DIR"
 
 LIST="$LOG_DIR/repos.txt"
 : > "$LIST"
+if test -n "$FROM"; then
+  sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e "s|^~|$HOME|" "$FROM" | grep -v '^$' >> "$LIST"
+fi
 printf '%s\n' "$ROOTS" | while IFS= read -r root; do
   test -z "$root" && continue
   test -d "$root" || { echo "aviso: $root não existe" >&2; continue; }
   find "$root" -maxdepth "$DEPTH" \( -name node_modules -o -name worktrees -o -name mirrors -o -name 'backups*' -o -name 'obsoleto*' -o -name Library -o -name .Trash -o -name .build -o -name Pods \) -prune -o -name .git -print 2>/dev/null \
     | sed 's|/\.git$||' >> "$LIST"
 done
+grep -vxF "$KIT_DIR" "$LIST" > "$LIST.tmp"; mv "$LIST.tmp" "$LIST"
 sort -u "$LIST" -o "$LIST"
 
 TOTAL="$(wc -l < "$LIST" | tr -d ' ')"
